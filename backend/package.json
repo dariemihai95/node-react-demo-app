@@ -1,0 +1,38 @@
+{
+  "name": "backend.demo",
+  "version": "1.0.0",
+  "description": "Demo Backend",
+  "main": "index.ts",
+  "scripts": {
+    "start": "ts-node-dev ./index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "openapi": "openapi-generator-cli generate -i schema.yaml -g typescript-node -o ./src/openapi && rm -fr ./src/openapi/api && rm ./src/openapi/api.ts"
+  },
+  "author": "Mihai-Cristian Darie",
+  "license": "ISC",
+  "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.4.21",
+    "@types/express": "^4.17.13",
+    "@types/node": "^17.0.2",
+    "@types/validator": "^13.7.0",
+    "@typescript-eslint/eslint-plugin": "^5.8.0",
+    "@typescript-eslint/parser": "^5.8.0",
+    "eslint": "^8.5.0",
+    "pg": "^8.7.1",
+    "ts-node": "^10.4.0",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.5.4"
+  },
+  "dependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/jsonwebtoken": "^8.5.6",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.2",
+    "express-openapi-validator": "3.10.0",
+    "jsonwebtoken": "^8.5.1",
+    "reflect-metadata": "^0.1.13",
+    "sequelize": "^6.12.1",
+    "sequelize-typescript": "^2.1.1"
+  }
+}
