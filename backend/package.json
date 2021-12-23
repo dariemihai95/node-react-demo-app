@@ -4,7 +4,7 @@
   "description": "Demo Backend",
   "main": "index.ts",
   "scripts": {
-    "start": "ts-node-dev ./index.ts",
+    "start": "ts-node-dev --respawn ./index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "openapi": "openapi-generator-cli generate -i schema.yaml -g typescript-node -o ./src/openapi && rm -fr ./src/openapi/api && rm ./src/openapi/api.ts"
   },

@@ -13,13 +13,14 @@ class TaskConverter {
         return taskDto;
     }
 
-    public convertToDao(taskDto: Task): TaskDao {
+    public convertToDao(taskDto: Task, userId: string): TaskDao {
         const taskDao: TaskDao = new TaskDao();
         taskDao.name = taskDto.name || '';
         taskDao.description = taskDto.description || '';
         taskDao.dueDate = taskDto.dueDate || '';
         taskDao.status = taskDto.status || '';
         taskDao.tags = taskDto.tags || '';
+        taskDao.userId = userId || '';
         return taskDao;
     }
 }

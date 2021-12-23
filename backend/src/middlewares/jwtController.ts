@@ -4,9 +4,10 @@ import * as jwt from "jsonwebtoken";
 import { HandledError } from '../config/HandledError';
 
 export const verifyAccessToken = (request: any, callbackSuccess: any, callbackError: any): void => {
+  console.warn(request.headers.authorization)
   const bearerToken: string = <string>request.headers.authorization;
   const accessToken = bearerToken.split(' ')[1];
-  jwt.verify(accessToken, process.env.ACCESS_KEY || "", function (error, decoded) {
+  jwt.verify(accessToken, process.env.ACCESS_KEY || "jwt", { maxAge: jwtExpiry.auth }, function (error, decoded) {
     if (error) {
       callbackError(new HandledError({ ...error, status: 400 }));
     }
@@ -26,3 +27,7 @@ export const signJwt = (username: string): JwtAuthenticationResponse => {
   }
   return jwtAuthenticationResponseToken;
 }
+
+export const decodeJwt = (token: string) => {
+  return jwt.decode(token.replace('Bearer ', ''));
+};

@@ -3,6 +3,7 @@ import 'source-map-support/register';
 import path from 'path';
 import { OpenApiValidator } from 'express-openapi-validator';
 import { sequelize } from './src/config/database';
+import { verifyAccessToken } from './src/middlewares/jwtController';
 import express, { Application, Request, Response, NextFunction } from 'express';
 
 class App {
@@ -104,27 +105,27 @@ class App {
   // }
   private async initializeRoutes() {
     await new OpenApiValidator({
-      apiSpec: path.join(__dirname, 'schema.yaml'),
+      apiSpec: this.schemaPath,
       validateResponses: false,
       validateRequests: false,
       operationHandlers: path.join(__dirname, 'src'),
-      // validateSecurity: {
-      //   handlers: {
-      //     BearerAuth: (req: any, scopes, schema) => {
-      //       return new Promise((resolve, reject) => {
-      //         verifyAccessToken(
-      //           req,
-      //           (successBoolean: any) => {
-      //             resolve(successBoolean);
-      //           },
-      //           (errorMessage: any) => {
-      //             reject(errorMessage);
-      //           }
-      //         );
-      //       });
-      //     },
-      //   }
-      // },
+      validateSecurity: {
+        handlers: {
+          BearerAuth: (req: any, scopes, schema) => {
+            return new Promise((resolve, reject) => {
+              verifyAccessToken(
+                req,
+                (successBoolean: any) => {
+                  resolve(successBoolean);
+                },
+                (errorMessage: any) => {
+                  reject(errorMessage);
+                }
+              );
+            });
+          },
+        }
+      },
     })
       .install(this.app)
       .then(() => {
