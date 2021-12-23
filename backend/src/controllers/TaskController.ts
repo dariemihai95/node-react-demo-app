@@ -14,8 +14,7 @@ export class TaskController {
 
   static getTasks = async (request: any, response: express.Response, next: express.NextFunction) => {
     const accessToken = request.headers.authorization;
-    const taskList: Task[] = await TaskService.getAllTasks(accessToken);
-    console.warn(taskList)
+    const taskList: Task[] = await TaskService.getAllTasksByUser(accessToken);
     response.send(taskList);
   }
 

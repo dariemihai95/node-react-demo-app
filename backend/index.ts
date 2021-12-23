@@ -106,7 +106,7 @@ class App {
   private async initializeRoutes() {
     await new OpenApiValidator({
       apiSpec: this.schemaPath,
-      validateResponses: false,
+      validateResponses: true,
       validateRequests: false,
       operationHandlers: path.join(__dirname, 'src'),
       validateSecurity: {
@@ -136,7 +136,6 @@ class App {
               message: error.message,
             }))
           }
-
           res.status(err.status || 500).json({
             timestamp: new Date().toUTCString(),
             status: err.status || 500,
@@ -144,7 +143,6 @@ class App {
             message: err.message,
             errors: errors || err.errors,
           });
-
         });
       })
   }

@@ -44,7 +44,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                type: object
+
         '400':
           description: Request has wrong format
         '409':
@@ -171,7 +172,7 @@ components:
           type: string
       required:
         - name
-        - decription
+        - description
         - dueDate
         - status
     User:
