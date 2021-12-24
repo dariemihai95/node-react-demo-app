@@ -33,7 +33,7 @@ paths:
       parameters: []
       requestBody:
         description: The user object to be created
-        required: true
+        # required: true
         content:
           application/json:
             schema:
@@ -61,7 +61,7 @@ paths:
       parameters: []
       requestBody:
         description: Authentication request
-        required: true
+        # required: true
         content:
           application/json:
             schema:
@@ -92,7 +92,7 @@ paths:
       parameters: []
       requestBody:
         description: Create Task
-        required: true
+        # required: true
         content:
           application/json:
             schema:

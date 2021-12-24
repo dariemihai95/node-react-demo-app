@@ -9,11 +9,11 @@ import express, { Application, Request, Response, NextFunction } from 'express';
 class App {
   public app: Application;
   public port: number;
-  public schemaPath = './schema.yaml'
+  public schemaPath = '../schema.yaml'
 
   constructor() {
     this.app = express();
-    this.port = parseInt(`${process.env.PORT}`, 10) || 3000;
+    this.port = parseInt(`${process.env.PORT}`, 10) || 3001;
     this.init();
   }
 
@@ -42,8 +42,9 @@ class App {
 
   public allowCrossDomain = function (request: Request, response: Response, next: NextFunction) {
     response.header('Access-Control-Allow-Origin', '*');
-    response.header('Access-Control-Allow-Methods', 'GET,POST, PUT, DELETE');
-    response.header('Access-Control-Allow-Headers', 'Content-Type,accessToken');
+    response.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    // response.header('Access-Control-Allow-Headers', 'Content-Type,accessToken');
+    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
   }
 
