@@ -1,7 +1,7 @@
 require('dotenv').config()
 import 'source-map-support/register';
 import path from 'path';
-import { OpenApiValidator } from 'express-openapi-validator';
+import * as OpenApiValidator from 'express-openapi-validator';
 import { sequelize } from './src/config/database';
 import { verifyAccessToken } from './src/middlewares/jwtController';
 import express, { Application, Request, Response, NextFunction } from 'express';
@@ -35,7 +35,7 @@ class App {
       this.listen(this.port);
 
     } catch (e) {
-      console.log('Server errored');
+      console.log('Server error occured');
       console.log(e);
     }
   }
@@ -55,64 +55,24 @@ class App {
   }
 
   public async initializeDatabase() {
-    await sequelize.sync({ force: true }); // false, to keep databsae intact
+    await sequelize.sync({ force: true }); // false, to keep database data between server restarts
   }
 
   private initializeMiddlewares() {
     this.app.use(express.json());
     this.app.use(this.allowCrossDomain);
-    this.app.use(express.text());
-    this.app.use(express.urlencoded({ extended: false }));
   }
 
-  // private initializeRoutes() {
-  //   this.app.use(OpenApiValidator.middleware({
-  //     apiSpec: this.schemaPath,
-  //     validateResponses: true,
-  //     operationHandlers: path.join(__dirname, 'src'),
-  //     validateSecurity: {
-  //       handlers: {
-  //         BearerAuth: (req: any, scopes: any, schema: any) => {
-  //           return new Promise((resolve, reject) => {
-  //             verifyAccessToken(
-  //               req,
-  //               (successBoolean: any) => {
-  //                 resolve(successBoolean);
-  //               },
-  //               (errorMessage: any) => {
-  //                 reject(errorMessage);
-  //               }
-  //             );
-  //           });
-  //         },
-  //       }
-  //     },
-  //   }))
-  //   this.app.use((err: any, req: any, res: any, next: any) => {
-  //     let errors = [];
-  //     if (err.errors) {
-  //       errors = err.errors.map((error: any) => ({
-  //         message: error.message,
-  //       }))
-  //     }
-  //     res.status(err.status || 500).json({
-  //       timestamp: new Date().toUTCString(),
-  //       status: err.status || 500,
-  //       name: err.name,
-  //       message: err.message,
-  //       errors: errors || err.errors,
-  //     });
-  //   });
-  // }
-  private async initializeRoutes() {
-    await new OpenApiValidator({
+  private initializeRoutes() {
+    this.app.use(OpenApiValidator.middleware({
       apiSpec: this.schemaPath,
-      validateResponses: true,
-      validateRequests: false,
+      validateResponses: false,
+      validateRequests: true,
       operationHandlers: path.join(__dirname, 'src'),
       validateSecurity: {
         handlers: {
-          BearerAuth: (req: any, scopes, schema) => {
+          BearerAuth: (req: any, scopes: any, schema: any) => {
+            console.warn(req)
             return new Promise((resolve, reject) => {
               verifyAccessToken(
                 req,
@@ -127,25 +87,22 @@ class App {
           },
         }
       },
-    })
-      .install(this.app)
-      .then(() => {
-        this.app.use((err: any, req: any, res: any, next: any) => {
-          let errors = [];
-          if (err.errors) {
-            errors = err.errors.map((error: any) => ({
-              message: error.message,
-            }))
-          }
-          res.status(err.status || 500).json({
-            timestamp: new Date().toUTCString(),
-            status: err.status || 500,
-            name: err.name,
-            message: err.message,
-            errors: errors || err.errors,
-          });
-        });
-      })
+    }))
+    this.app.use((err: any, req: any, res: any, next: any) => {
+      let errors = [];
+      if (err.errors) {
+        errors = err.errors.map((error: any) => ({
+          message: error.message,
+        }))
+      }
+      res.status(err.status || 500).json({
+        timestamp: new Date().toUTCString(),
+        status: err.status || 500,
+        name: err.name,
+        message: err.message,
+        errors: errors || err.errors,
+      });
+    });
   }
 }
 
