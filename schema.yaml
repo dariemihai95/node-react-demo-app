@@ -6,7 +6,7 @@ info:
     email: dariemihai95@gmail.com
   version: 1.0.0
 paths:
-  /test:
+  /authentication/test:
     get:
       tags:
         - test
@@ -33,7 +33,7 @@ paths:
       parameters: []
       requestBody:
         description: The user object to be created
-        # required: true
+        required: true
         content:
           application/json:
             schema:
@@ -45,7 +45,6 @@ paths:
             application/json:
               schema:
                 type: object
-
         '400':
           description: Request has wrong format
         '409':
@@ -61,7 +60,7 @@ paths:
       parameters: []
       requestBody:
         description: Authentication request
-        # required: true
+        required: true
         content:
           application/json:
             schema:
@@ -79,6 +78,21 @@ paths:
           description: You don't have privileges to access this resource
         '404':
           description: The requested resource was not found
+  /api/test:
+    get:
+      tags:
+        - test
+      summary: Test route
+      description: Basic route to test to functionality of the api
+      operationId: testTask
+      x-eov-operation-handler: controllers/TaskController
+      responses:
+        '200':
+          description: Succesful test
+          content:
+            application/json:
+              schema:
+                type: boolean
   /api/task:
     post:
       security:
@@ -92,7 +106,7 @@ paths:
       parameters: []
       requestBody:
         description: Create Task
-        # required: true
+        required: true
         content:
           application/json:
             schema:
