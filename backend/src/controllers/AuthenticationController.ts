@@ -24,6 +24,7 @@ module.exports = {
     try {
       const user: User = request.body;
       const jwtAuthenticationResponse: JwtAuthenticationResponse = await UserService.loginUser(user);
+      response.setHeader("Authorization", jwtAuthenticationResponse.accessToken);
       response.status(Responses.created.status).send(jwtAuthenticationResponse);
     } catch (error: any) {
       next(error);

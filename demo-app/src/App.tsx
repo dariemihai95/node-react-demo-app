@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Routes, Route } from "react-router-dom";
 import './App.css';
-import HomeScreen from './HomeScreen/HomeScreen';
-import LoginScreen from './LoginScreen/LoginScreen';
-import RegisterScreen from './RegisterScreen/RegisterScreen';
+import HomeScreen from './containers/HomeScreen/HomeScreen';
+import LoginScreen from './containers/LoginScreen/LoginScreen';
+import PrivateRoute from './containers/PrivateRoute';
+import RegisterScreen from './containers/RegisterScreen/RegisterScreen';
 import themes from './utils/themes';
 
 function App() {
@@ -31,9 +32,14 @@ function App() {
   return (
     <div className="App" style={{ backgroundColor: themes.colors.background, height: screenSize.dynamicHeight, width: screenSize.dynamicWidth }}>
       <Routes>
-        <Route path="/" element={<HomeScreen />} />
-        <Route path="/register" element={<RegisterScreen />} />
         <Route path="/login" element={<LoginScreen />} />
+        <Route path="/register" element={<RegisterScreen />} />
+        <Route path="/" element={
+          <PrivateRoute>
+            <HomeScreen />
+          </PrivateRoute>
+        }
+        />
       </Routes>
     </div>
   );

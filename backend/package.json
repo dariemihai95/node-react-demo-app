@@ -4,7 +4,7 @@
   "description": "Demo Backend",
   "main": "index.ts",
   "scripts": {
-    "start": "ts-node-dev --respawn ./index.ts",
+    "start": "ts-node-dev ./index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "openapi": "openapi-generator-cli generate -i ../schema.yaml -g typescript-node -o ./src/openapi && rm -fr ./src/openapi/api && rm ./src/openapi/api.ts"
   },
@@ -27,6 +27,7 @@
     "@types/bcryptjs": "^2.4.2",
     "@types/jsonwebtoken": "^8.5.6",
     "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.2",
     "express-openapi-validator": "4.13.4",

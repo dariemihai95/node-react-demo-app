@@ -1,61 +1,70 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { IJwtAuthenticationResponse } from '../../openapi';
 import { postLogin } from '../../services/axiosService';
-import themes from '../utils/themes';
+import { setAuthToken } from '../../utils/authManager';
+import themes from '../../utils/themes';
 
-class LoginScreen extends Component {
+const LoginScreen = () => {
+  let navigate = useNavigate();
 
-  state = { username: '', password: '' };
+  const [accountData, setAccountData] = useState({ username: '', password: '' });
+  const [loginError, setLoginError] = useState('');
 
-  handleChange = (event: any) => {
-    this.setState({ ...this.state, [event.target.name]: event.target.value });
+  const handleChange = (event: any) => {
+    setAccountData({ ...accountData, [event.target.name]: event.target.value });
   }
 
-  handleSubmit = async (event: any) => {
+  const handleSubmit = async (event: any) => {
+    const { username, password } = accountData;
     event.preventDefault();
-    // alert('A name was submitted: ' + this.state);
-    const loginData = await postLogin();
-    console.warn(loginData);
+    const loginData: IJwtAuthenticationResponse | string = await postLogin({ username: username, password: password });
+    if (typeof loginData !== 'string' && loginData?.accessToken) {
+      setAuthToken(loginData.accessToken)
+      setAccountData({ username: '', password: '' });
+      navigate("/", { replace: true });
+    } else {
+      setLoginError(loginData as string || '');
+    }
   }
-
-  render() {
-    return (
-      <div>
-        <label>Login Page</label>
-        <form
-          style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gridGap: 20 }}
-          onSubmit={this.handleSubmit}
-        >
-          <li>
-            <label>
-              Username:
-              <input
+  return (
+    <div>
+      <label>Login Page</label>
+      <form
+        style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gridGap: 20 }}
+        onSubmit={handleSubmit}
+      >
+        <li>
+          <label>
+            Username:
+            <input
               type="text"
               name="username"
-              onChange={this.handleChange}
-              value={this.state.username}
-              />
-            </label>
-          </li>
-          <li>
-            <label>
-              Password:
-              <input
+              onChange={handleChange}
+              value={accountData.username}
+            />
+          </label>
+        </li>
+        <li>
+          <label>
+            Password:
+            <input
               type="text"
               name="password"
-              onChange={this.handleChange}
-              value={this.state.password}
-              />
-            </label>
-          </li>
-          <li>
-            <input type="submit" value="Submit" />
-          </li>
-        </form>
-        <Link to="/register">Register</Link>
-      </div>
-    );
-  }
+              onChange={handleChange}
+              value={accountData.password}
+            />
+          </label>
+        </li>
+        <label style={{color: themes.colors.errorHighligh}}>{loginError}</label>
+        <li>
+          <input type="submit" value="Submit" />
+        </li>
+      </form>
+      <Link to="/register">Register</Link>
+      <Link to="/tasks">Tasks</Link>
+    </div>
+  );
 }
 
 export default LoginScreen;

@@ -1,4 +1,5 @@
 require('dotenv').config()
+var cors = require('cors');
 import 'source-map-support/register';
 import path from 'path';
 import * as OpenApiValidator from 'express-openapi-validator';
@@ -42,9 +43,8 @@ class App {
 
   public allowCrossDomain = function (request: Request, response: Response, next: NextFunction) {
     response.header('Access-Control-Allow-Origin', '*');
-    response.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    // response.header('Access-Control-Allow-Headers', 'Content-Type,accessToken');
-    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    response.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,OPTIONS,DELETE");
+    response.setHeader("Access-Control-Allow-Headers", "X-Requested-With, Access-Control-Allow-Headers, Content-Type, Authorization, Origin, Accept");
     next();
   }
 
@@ -59,6 +59,7 @@ class App {
   }
 
   private initializeMiddlewares() {
+    this.app.use(cors({ origin: true, credentials: true }));
     this.app.use(express.json());
     this.app.use(this.allowCrossDomain);
   }

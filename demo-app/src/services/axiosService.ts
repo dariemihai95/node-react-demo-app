@@ -1,11 +1,14 @@
 import { AxiosResponse } from 'axios';
 import { URIBase, path, RequestMethod } from '../utils/constants';
-import { isObjectEmpty, isString } from '../utils/validators';
+import { isString } from '../utils/validators';
 import axios from 'axios';
-import qs from 'qs';
+import { IJwtAuthenticationResponse, ITask, IUser } from '../openapi';
+import { getAuthToken } from '../utils/authManager';
 
-let instance = axios.create({
-  headers: { 'Content-Type': 'application/json' },
+const jwt = getAuthToken();
+
+export const instance = axios.create({
+  headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwt}` || '' },
   timeout: 10000,
   // withCredentials: true
 });
@@ -27,8 +30,8 @@ export const makeAxiosConfig = (method: RequestMethod, uriBase: URIBase, path: s
   return {
     method: method,
     url: url,
-    data: qs.stringify({
-      ...body,
+    data: JSON.stringify({
+      ...body
     })
   };
 };
@@ -36,29 +39,19 @@ export const makeAxiosConfig = (method: RequestMethod, uriBase: URIBase, path: s
 export const makeRequest = async (method: RequestMethod, uriBase: URIBase, path: string, body: object, shouldReturnError?: boolean, functionName?: string): Promise<any> => {
   return instance(makeAxiosConfig(method, uriBase, path, body))
     .then((response: AxiosResponse) => {
-      console.warn(response)
+      // console.warn(response.data)
       const apiResponse = response.data;
+      console.warn(response)
       if (!apiResponse) {
         throw new Error('Unexpected error: Missing Axios response data');
-      } else {
-        if (apiResponse.code) {
-          throw new Error(apiResponse.message);
-        }
-        if (apiResponse.status) {
-          if (isObjectEmpty(apiResponse.data)) {
-            throw new Error('Unexpected error: Missing Api response data');
-          }
-        } else {
-          throw new Error(apiResponse.message);
-        }
       }
-      return apiResponse || {};
+      return response.data;
     })
     .catch((error: any) => {
-      console.log(functionName || '[makeRequest]', error.message);
+      console.error(`${error.response.data.name}:`, error.response.data.message);
       if (shouldReturnError) {
-        if (isString(error.message)) {
-          return `* ${error.message}`;
+        if (isString(error.response.data.message)) {
+          return `* ${error.response.data.message}`;
         } else {
           return '';
         }
@@ -66,22 +59,22 @@ export const makeRequest = async (method: RequestMethod, uriBase: URIBase, path:
     });
 };
 
-export const postRegister = async (): Promise<any> => {
-  return await makeRequest(RequestMethod.POST, URIBase.api, path.register, {}, false, '[postRegister]');
+export const postRegister = async (payload: IUser): Promise<{ username: string } | string> => {
+  return await makeRequest(RequestMethod.POST, URIBase.api, path.register, payload, true, '[postRegister]');
 };
 
-export const postLogin = async (): Promise<any> => {
-  return await makeRequest(RequestMethod.POST, URIBase.api, path.login, {}, false, '[postLogin]');
+export const postLogin = async (payload: IUser): Promise<IJwtAuthenticationResponse | string> => {
+  return await makeRequest(RequestMethod.POST, URIBase.api, path.login, payload, true, '[postLogin]');
 };
 
-export const postCreateTask = async (): Promise<any> => {
-  return await makeRequest(RequestMethod.POST, URIBase.api, path.createTask, {}, false, '[postCreateTask]');
+export const postCreateTask = async (payload: ITask): Promise<ITask | string> => {
+  return await makeRequest(RequestMethod.POST, URIBase.api, path.createTask, payload, true, '[postCreateTask]');
 };
 
-export const getTaskList = async (): Promise<any> => {
-  return await makeRequest(RequestMethod.GET, URIBase.api, path.getTaskList, {}, false, '[getTaskList]');
+export const getTaskList = async (): Promise<ITask[] | string> => {
+  return await makeRequest(RequestMethod.GET, URIBase.api, path.getTaskList, {}, true, '[getTaskList]');
 };
 
-export const getTask = async (): Promise<any> => {
-  return await makeRequest(RequestMethod.GET, URIBase.api, path.getTask, {}, false, '[getTask]');
+export const getTask = async (): Promise<ITask | string> => {
+  return await makeRequest(RequestMethod.GET, URIBase.api, path.getTask, {}, true, '[getTask]');
 };
