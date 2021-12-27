@@ -35,14 +35,14 @@ class TaskService {
     throw new HandledError(Responses.forbidden);
   }
 
-  public async getAllTasksByUser(accessToken: string): Promise<Array<Task>> {
+  public async getAllTasksByUser(accessToken: string, pageSize: number, pageNumber: number, order: string, sortBy?: string): Promise<Array<Task>> {
     const decodedToken = decodeJwt(accessToken);
     if (typeof decodedToken != null && typeof decodedToken !== 'string') {
       const userDao = await UserRepository.findOneByUsername(decodedToken!.username)
-      if(userDao != null){
-      const taskList: TaskDao[] = await TaskRepository.findAllById(userDao.userId);
-      const taskListDto: Task[] = taskList.map((task: TaskDao) => TaskConverter.convertToDto(task));
-      return taskListDto;
+      if (userDao != null) {
+        const taskList: TaskDao[] = await TaskRepository.findAllById(userDao.userId, pageSize, pageNumber, order, sortBy);
+        const taskListDto: Task[] = taskList.map((task: TaskDao) => TaskConverter.convertToDto(task));
+        return taskListDto;
       }
       throw new HandledError(Responses.notFound);
     }

@@ -12,8 +12,13 @@ class TaskRepository {
         return taskList;
     }
 
-    public async findAllById(userId: string): Promise<Array<TaskDao>> {
-        const taskList: TaskDao[] = await TaskDao.findAll({ where: { userId: userId } });
+    public async findAllById(userId: string, pageSize: number, pageNumber: number, order: string, sortBy?: string): Promise<Array<TaskDao>> {
+        const taskList: TaskDao[] = await TaskDao.findAll({
+            where: { userId: userId },
+            offset: (pageNumber - 1) * pageSize,
+            limit: pageSize,
+            order: !sortBy ? undefined : [sortBy, order]
+        });
         return taskList;
     }
 

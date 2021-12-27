@@ -29,37 +29,35 @@ const RegisterScreen = () => {
     <div>
       <label>Register Page</label>
       <form
-        style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gridGap: 20 }}
+        // style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
         onSubmit={handleSubmit}
       >
-        <li>
-          <label>
-            Username:
-            <input
-              type="text"
-              name="username"
-              onChange={handleChange}
-              value={accountData.username}
-            />
-          </label>
-        </li>
-        <li>
-          <label>
-            Password:
-            <input
-              type="text"
-              name="password"
-              onChange={handleChange}
-              value={accountData.password}
-            />
-          </label>
-        </li>
-        <label style={{color: 'red'}}>{registerError}</label>
-        <li>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <h4>Username: </h4>
+          <input
+            type="text"
+            name="username"
+            onChange={handleChange}
+            value={accountData.username}
+          />
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <h4>Password: </h4>
+          <input
+            type="text"
+            name="password"
+            onChange={handleChange}
+            value={accountData.password}
+          />
+        </div>
+        <div>
+          <label style={{ color: 'red' }}>{registerError}</label>
+          <br />
           <input type="submit" value="Register" />
-        </li>
+        </div>
       </form>
-      <Link to="/login">Login</Link>
+      <label>Already have an account ? {<Link to="/login">Login</Link>}</label>
+      {/* <Link to="/login">Login</Link> */}
     </div>
   );
 }

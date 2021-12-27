@@ -7,7 +7,7 @@ import { getAuthToken } from '../utils/authManager';
 
 const jwt = getAuthToken();
 
-export const instance = axios.create({
+export let instance = axios.create({
   headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwt}` || '' },
   timeout: 10000,
   // withCredentials: true
@@ -39,9 +39,7 @@ export const makeAxiosConfig = (method: RequestMethod, uriBase: URIBase, path: s
 export const makeRequest = async (method: RequestMethod, uriBase: URIBase, path: string, body: object, shouldReturnError?: boolean, functionName?: string): Promise<any> => {
   return instance(makeAxiosConfig(method, uriBase, path, body))
     .then((response: AxiosResponse) => {
-      // console.warn(response.data)
       const apiResponse = response.data;
-      console.warn(response)
       if (!apiResponse) {
         throw new Error('Unexpected error: Missing Axios response data');
       }
@@ -71,10 +69,17 @@ export const postCreateTask = async (payload: ITask): Promise<ITask | string> =>
   return await makeRequest(RequestMethod.POST, URIBase.api, path.createTask, payload, true, '[postCreateTask]');
 };
 
-export const getTaskList = async (): Promise<ITask[] | string> => {
-  return await makeRequest(RequestMethod.GET, URIBase.api, path.getTaskList, {}, true, '[getTaskList]');
+export const getTaskList = async (queryItems: { pageSize?: number, pageNumber?: number, order?: string, sortBy?: string }): Promise<ITask[] | string> => {
+  return await makeRequest(RequestMethod.GET, URIBase.api, path.getTaskList, queryItems, true, '[getTaskList]');
 };
 
 export const getTask = async (): Promise<ITask | string> => {
   return await makeRequest(RequestMethod.GET, URIBase.api, path.getTask, {}, true, '[getTask]');
+};
+
+export const recreateAxiosInstance = () => {
+  instance = axios.create({
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwt}` || '' },
+    timeout: 10000,
+  });
 };

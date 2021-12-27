@@ -134,19 +134,32 @@ paths:
       description: Json consisting of configuration data for a specific endpoint.
       operationId: getTasks
       x-eov-operation-handler: controllers/TaskController
-      # parameters:
-      #   - in: query
-      #     name: pageSize
-      #     schema:
-      #       type: integer
-      #       default: 10
-      #     required: true
-      #   - in: query
-      #     name: pageNumber
-      #     schema:
-      #       type: integer
-      #       default: 1
-      #     required: true
+      parameters:
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            default: 5
+          required: false
+        - in: query
+          name: pageNumber
+          schema:
+            type: integer
+            default: 1
+          required: false
+        - in: query
+          name: sortBy
+          schema:
+            type: string
+            enum: [name, description, dueDate, status]
+          required: false
+        - in: query
+          name: order
+          schema:
+            type: string
+            enum: [ASC, DESC]
+            default: 'ASC'
+          required: false
       responses:
         '200':
           description: Succesfully received resource.
@@ -180,8 +193,11 @@ components:
           type: string
         dueDate:
           type: string
+          format: date
         status:
           type: string
+          # enum: [ToDo, InProgress, Done, Failed]
+          default: ToDo
         tags:
           type: string
       required:

@@ -73,7 +73,6 @@ class App {
       validateSecurity: {
         handlers: {
           BearerAuth: (req: any, scopes: any, schema: any) => {
-            console.warn(req)
             return new Promise((resolve, reject) => {
               verifyAccessToken(
                 req,

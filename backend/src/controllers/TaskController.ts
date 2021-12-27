@@ -22,8 +22,12 @@ module.exports = {
 
   getTasks: async (request: any, response: express.Response, next: express.NextFunction) => {
     try {
+      const pageSize: number = request.query.pageSize || 5;
+      const pageNumber: number = request.query.pageNumber || 1;
+      const sortBy: string | undefined = request.query.sortBy;
+      const order: string = request.query.order || 'ASC';
       const accessToken = request.headers.authorization;
-      const taskList: Task[] = await TaskService.getAllTasksByUser(accessToken);
+      const taskList: Task[] = await TaskService.getAllTasksByUser(accessToken, pageSize, pageNumber, order, sortBy);
       response.send(taskList);
     } catch (error) {
       next(error);

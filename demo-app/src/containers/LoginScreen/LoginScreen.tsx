@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { IJwtAuthenticationResponse } from '../../openapi';
-import { postLogin } from '../../services/axiosService';
-import { setAuthToken } from '../../utils/authManager';
-import themes from '../../utils/themes';
+import { postLogin, recreateAxiosInstance } from '../../services/axiosService';
+import { removeAuthToken, setAuthToken } from '../../utils/authManager';
+import { sleep } from '../../utils/validators';
 
 const LoginScreen = () => {
   let navigate = useNavigate();
@@ -20,10 +20,15 @@ const LoginScreen = () => {
     event.preventDefault();
     const loginData: IJwtAuthenticationResponse | string = await postLogin({ username: username, password: password });
     if (typeof loginData !== 'string' && loginData?.accessToken) {
-      setAuthToken(loginData.accessToken)
+      // removeAuthToken();
+      setAuthToken(loginData.accessToken);
+      recreateAxiosInstance();
       setAccountData({ username: '', password: '' });
-      navigate("/", { replace: true });
+      await sleep(0.5);
+      navigate('../', { replace: true });
+      // console.warn('sdadfasda')
     } else {
+      recreateAxiosInstance();
       setLoginError(loginData as string || '');
     }
   }
@@ -31,38 +36,32 @@ const LoginScreen = () => {
     <div>
       <label>Login Page</label>
       <form
-        style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gridGap: 20 }}
+        // style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
         onSubmit={handleSubmit}
       >
-        <li>
-          <label>
-            Username:
-            <input
-              type="text"
-              name="username"
-              onChange={handleChange}
-              value={accountData.username}
-            />
-          </label>
-        </li>
-        <li>
-          <label>
-            Password:
-            <input
-              type="text"
-              name="password"
-              onChange={handleChange}
-              value={accountData.password}
-            />
-          </label>
-        </li>
-        <label style={{color: themes.colors.errorHighligh}}>{loginError}</label>
-        <li>
-          <input type="submit" value="Submit" />
-        </li>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <h4>Username: </h4>
+          <input
+            type="text"
+            name="username"
+            onChange={handleChange}
+            value={accountData.username}
+          />
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <h4>Password: </h4>
+          <input
+            type="text"
+            name="password"
+            onChange={handleChange}
+            value={accountData.password}
+          />
+        </div>
+        <label style={{ color: 'red' }}>{loginError}</label>
+        <br />
+        <input type="submit" value="Log In" />
       </form>
-      <Link to="/register">Register</Link>
-      <Link to="/tasks">Tasks</Link>
+      <label>If you don't have an account, {<Link to="/register">register</Link>} now.</label>
     </div>
   );
 }

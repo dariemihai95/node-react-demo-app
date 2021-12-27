@@ -17,11 +17,15 @@ export const verifyAccessToken = (request: any, callbackSuccess: any, callbackEr
 export const signJwt = (username: string): JwtAuthenticationResponse => {
   const jwtAuthenticationResponseToken: JwtAuthenticationResponse = new JwtAuthenticationResponse();
   if (username) {
-    const accessToken: string = jwt.sign({
-      username: username,
-    }, process.env.ACCESS_KEY || "jwt", {
-      expiresIn: jwtExpiry.auth
-    });
+    const accessToken: string = jwt.sign(
+      {
+        username: username,
+        iat: Math.floor(Date.now() / 1000) - 60
+      },
+      process.env.ACCESS_KEY || "jwt",
+      {
+        expiresIn: jwtExpiry.auth,
+      });
     jwtAuthenticationResponseToken.accessToken = accessToken;
   }
   return jwtAuthenticationResponseToken;
