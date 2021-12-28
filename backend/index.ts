@@ -14,7 +14,7 @@ class App {
 
   constructor() {
     this.app = express();
-    this.port = parseInt(`${process.env.PORT}`, 10) || 3001;
+    this.port = parseInt(`${process.env.PORT}`, 10) || 8080;
     this.init();
   }
 

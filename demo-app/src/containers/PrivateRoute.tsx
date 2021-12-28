@@ -1,10 +1,7 @@
 import { Navigate } from "react-router-dom";
-import { isAuth } from "../utils/authManager";
 
-const isLoggedIn = isAuth();
-
-function PrivateRoute({ children }: any) {
-  return isLoggedIn ? children : <Navigate to="/login" />;
+function PrivateRoute({ children, jwtToken }: {children: any, jwtToken: string}) {
+  return jwtToken ? children : <Navigate to="/login" />;
 }
 
 export default PrivateRoute;

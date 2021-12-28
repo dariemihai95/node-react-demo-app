@@ -29,7 +29,6 @@ const RegisterScreen = () => {
     <div>
       <label>Register Page</label>
       <form
-        // style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
         onSubmit={handleSubmit}
       >
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -57,7 +56,6 @@ const RegisterScreen = () => {
         </div>
       </form>
       <label>Already have an account ? {<Link to="/login">Login</Link>}</label>
-      {/* <Link to="/login">Login</Link> */}
     </div>
   );
 }

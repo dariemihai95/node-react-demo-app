@@ -8,7 +8,7 @@ export const verifyAccessToken = (request: any, callbackSuccess: any, callbackEr
   const accessToken = bearerToken.split(' ')[1];
   jwt.verify(accessToken, process.env.ACCESS_KEY || "jwt", { maxAge: jwtExpiry.auth }, function (error, decoded) {
     if (error) {
-      callbackError(new HandledError({ ...error, status: 400 }));
+      callbackError(new HandledError({ ...error, status: 401 }));
     }
     callbackSuccess(true);
   });

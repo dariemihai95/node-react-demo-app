@@ -5,9 +5,22 @@ import HomeScreen from './containers/HomeScreen/HomeScreen';
 import LoginScreen from './containers/LoginScreen/LoginScreen';
 import PrivateRoute from './containers/PrivateRoute';
 import RegisterScreen from './containers/RegisterScreen/RegisterScreen';
+import { getLocalStorageToken, setLocalStorageToken } from './utils/authManager';
 import themes from './utils/themes';
 
 function App() {
+
+  useEffect(() => {
+    const jwt = getLocalStorageToken();
+    jwt && setJwtToken(jwt);
+  }, [])
+
+  const onSetJwtToken = (jwt: string) => {
+    setJwtToken(jwt);
+    setLocalStorageToken(jwt);
+  }
+
+  const [jwtToken, setJwtToken] = useState('');
 
   const [screenSize, getDimension] = useState({
     dynamicWidth: window.innerWidth,
@@ -32,11 +45,11 @@ function App() {
   return (
     <div className="App" style={{ backgroundColor: themes.colors.background, height: screenSize.dynamicHeight, width: screenSize.dynamicWidth }}>
       <Routes>
-        <Route path="/login" element={<LoginScreen />} />
+        <Route path="/login" element={<LoginScreen setJwtToken={onSetJwtToken} />} />
         <Route path="/register" element={<RegisterScreen />} />
         <Route path="/" element={
-          <PrivateRoute>
-            <HomeScreen />
+          <PrivateRoute jwtToken={jwtToken}>
+            <HomeScreen jwtToken={jwtToken} setJwtToken={onSetJwtToken} />
           </PrivateRoute>
         }
         />

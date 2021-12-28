@@ -1,11 +1,9 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { IJwtAuthenticationResponse } from '../../openapi';
-import { postLogin, recreateAxiosInstance } from '../../services/axiosService';
-import { removeAuthToken, setAuthToken } from '../../utils/authManager';
-import { sleep } from '../../utils/validators';
+import { postLogin } from '../../services/axiosService';
 
-const LoginScreen = () => {
+const LoginScreen = ({setJwtToken}: {setJwtToken: (payload: string) => void}) => {
   let navigate = useNavigate();
 
   const [accountData, setAccountData] = useState({ username: '', password: '' });
@@ -16,19 +14,15 @@ const LoginScreen = () => {
   }
 
   const handleSubmit = async (event: any) => {
-    const { username, password } = accountData;
     event.preventDefault();
+    const { username, password } = accountData;
     const loginData: IJwtAuthenticationResponse | string = await postLogin({ username: username, password: password });
     if (typeof loginData !== 'string' && loginData?.accessToken) {
-      // removeAuthToken();
-      setAuthToken(loginData.accessToken);
-      recreateAxiosInstance();
+      setJwtToken(loginData.accessToken);
       setAccountData({ username: '', password: '' });
-      await sleep(0.5);
       navigate('../', { replace: true });
-      // console.warn('sdadfasda')
     } else {
-      recreateAxiosInstance();
+      setJwtToken('');
       setLoginError(loginData as string || '');
     }
   }
@@ -36,7 +30,6 @@ const LoginScreen = () => {
     <div>
       <label>Login Page</label>
       <form
-        // style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
         onSubmit={handleSubmit}
       >
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>

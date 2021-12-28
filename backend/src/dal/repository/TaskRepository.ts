@@ -17,7 +17,7 @@ class TaskRepository {
             where: { userId: userId },
             offset: (pageNumber - 1) * pageSize,
             limit: pageSize,
-            order: !sortBy ? undefined : [sortBy, order]
+            order: !sortBy ? undefined : [[sortBy, order]]
         });
         return taskList;
     }

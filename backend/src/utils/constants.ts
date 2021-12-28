@@ -4,5 +4,5 @@ export const daoModelName = {
 }
 
 export const jwtExpiry = {
-  auth: '5m',
+  auth: '25m',
 }

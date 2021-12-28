@@ -1,8 +1,8 @@
-export const setAuthToken = (token: string): void => {
+export const setLocalStorageToken = (token: string): void => {
   localStorage.setItem('jwt', token)
 }
 
-export const getAuthToken = (): string => {
+export const getLocalStorageToken = (): string => {
   const jwt = localStorage.getItem('jwt');
   if (jwt == null) {
     return '';
@@ -11,12 +11,12 @@ export const getAuthToken = (): string => {
   }
 }
 
-export const removeAuthToken = (): void => {
+export const removeLocalStorageToken = (): void => {
   localStorage.removeItem('jwt')
 }
 
 export const isAuth = (): boolean => {
-  const authToken = getAuthToken();
+  const authToken = getLocalStorageToken();
   if (authToken) {
     return true;
   }

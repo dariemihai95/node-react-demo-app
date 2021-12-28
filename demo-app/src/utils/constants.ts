@@ -14,5 +14,5 @@ export const path = {
 };
 
 export enum URIBase {
-  api = 'http://localhost:3001',
+  api = 'http://localhost:8080',
 }
