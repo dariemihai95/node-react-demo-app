@@ -1,0 +1,250 @@
+openapi: 3.0.3
+info:
+  title: demo-node
+  description: Demo
+  contact:
+    email: dariemihai95@gmail.com
+  version: 1.0.0
+paths:
+  /authentication/test:
+    get:
+      tags:
+        - test
+      summary: Test route
+      description: Basic route to test to functionality of the api
+      operationId: test
+      x-eov-operation-id: test
+      x-eov-operation-handler: controllers/AuthenticationController
+      responses:
+        '200':
+          description: Succesful test
+          content:
+            application/json:
+              schema:
+                type: boolean
+  /authentication/register:
+    post:
+      tags:
+        - authentication
+      summary: register
+      description: ''
+      operationId: register
+      x-eov-operation-handler: controllers/AuthenticationController
+      parameters: []
+      requestBody:
+        description: The user object to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: The request has been fulfilled and has resulted in one or more new resources being created
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Request has wrong format
+        '409':
+          description: An account with the following email already exists
+  /authentication/login:
+    post:
+      tags:
+        - authentication
+      summary: authenticate user
+      description: ''
+      operationId: login
+      x-eov-operation-handler: controllers/AuthenticationController
+      parameters: []
+      requestBody:
+        description: Authentication request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: The request has been fulfilled and has resulted in one or more new resources being created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtAuthenticationResponse'
+        '400':
+          description: Request has wrong format
+        '401':
+          description: You don't have privileges to access this resource
+        '404':
+          description: The requested resource was not found
+  /api/test:
+    get:
+      tags:
+        - test
+      summary: Test route
+      description: Basic route to test to functionality of the api
+      operationId: testTask
+      x-eov-operation-handler: controllers/TaskController
+      responses:
+        '200':
+          description: Succesful test
+          content:
+            application/json:
+              schema:
+                type: boolean
+  /api/task:
+    post:
+      security:
+        - BearerAuth: [] 
+      tags:
+        - task
+      summary: create task
+      description: ''
+      operationId: createTask
+      x-eov-operation-handler: controllers/TaskController
+      parameters: []
+      requestBody:
+        description: Create Task
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+      responses:
+        '201':
+          description: The request has been fulfilled and has resulted in one or more new resources being created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: Request has wrong format
+        '401':
+          description: You don't have privileges to access this resource
+        '404':
+          description: The requested resource was not found
+  /api/tasks:
+    get:
+      security:
+        - BearerAuth: []
+      tags:
+        - tasks
+      summary: Tasks
+      description: Json consisting of configuration data for a specific endpoint.
+      operationId: getTasks
+      x-eov-operation-handler: controllers/TaskController
+      parameters:
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+            default: 5
+          required: false
+        - in: query
+          name: pageNumber
+          schema:
+            type: integer
+            default: 1
+          required: false
+        - in: query
+          name: sortBy
+          schema:
+            type: string
+            enum: [name, description, dueDate, status]
+          required: false
+        - in: query
+          name: order
+          schema:
+            type: string
+            enum: [ASC, DESC]
+            default: 'ASC'
+          required: false
+      responses:
+        '200':
+          description: Succesfully received resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tasks'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse' 
+components:
+  securitySchemes:
+    BearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT 
+  schemas:
+    Tasks:
+      type: array
+      items:
+        $ref: '#/components/schemas/Task'
+    Task:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        dueDate:
+          type: string
+          format: date
+        status:
+          type: string
+          # enum: [ToDo, InProgress, Done, Failed]
+          default: ToDo
+        tags:
+          type: string
+      required:
+        - name
+        - description
+        - dueDate
+        - status
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+        - username
+        - password
+    DataResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        code:
+          type: integer
+        data:
+          type: array
+          items:
+            type: object
+    JwtAuthenticationResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+      required:
+        - accessToken
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+        message:
+          type: string
+        code:
+          type: integer
+        data:
+          type: array
+          items:
+            type: object

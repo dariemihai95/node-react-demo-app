@@ -1,0 +1,49 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  postgres-db:
+    restart: unless-stopped
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=docker
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432"
+    networks:
+      - app-net
+  node-backend:
+    restart: unless-stopped
+    image: express-api
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+    expose:
+      - "8080"
+    ports:
+      - "55770:8080"
+    depends_on:
+      - postgres-db
+    networks:
+      - app-net
+  react-app:
+    restart: unless-stopped
+    image: react-app
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+    expose:
+      - "3000"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - node-backend
+    networks:
+      - app-net
+networks:
+  app-net:
+    name: app-net
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.100.0.0/24

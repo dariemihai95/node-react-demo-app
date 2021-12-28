@@ -114,10 +114,10 @@ const HomeScreen = ({ jwtToken, setJwtToken }: { jwtToken: string, setJwtToken: 
       <div
       >
         <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-          <h3 style={{ width: 110 }}>Name<a style={{ textDecoration: 'none', cursor: 'pointer' }} onClick={() => handleListOrder(0)}>{selectedToOrder.index === 0 ? (selectedToOrder.ascending ? '\u2191' : '\u2193') : '-'}</a></h3>
-          <h3 style={{ width: 110 }}>Description<a style={{ textDecoration: 'none', cursor: 'pointer' }} onClick={() => handleListOrder(1)}>{selectedToOrder.index === 1 ? (selectedToOrder.ascending ? '\u2191' : '\u2193') : '-'}</a></h3>
-          <h3 style={{ width: 110 }}>Due Date<a style={{ textDecoration: 'none', cursor: 'pointer' }} onClick={() => handleListOrder(2)}>{selectedToOrder.index === 2 ? (selectedToOrder.ascending ? '\u2191' : '\u2193') : '-'}</a></h3>
-          <h3 style={{ width: 110 }}>Status<a style={{ textDecoration: 'none', cursor: 'pointer' }} onClick={() => handleListOrder(3)}>{selectedToOrder.index === 3 ? (selectedToOrder.ascending ? '\u2191' : '\u2193') : '-'}</a></h3>
+          <h3 style={{ width: 110 }}>Name<a style={{ textDecoration: 'none', cursor: 'pointer' }} onClick={() => handleListOrder(0)}>{selectedToOrder.index === 0 ? (selectedToOrder.ascending ? '\u2193' : '\u2191') : '-'}</a></h3>
+          <h3 style={{ width: 110 }}>Description<a style={{ textDecoration: 'none', cursor: 'pointer' }} onClick={() => handleListOrder(1)}>{selectedToOrder.index === 1 ? (selectedToOrder.ascending ? '\u2193' : '\u2191') : '-'}</a></h3>
+          <h3 style={{ width: 110 }}>Due Date<a style={{ textDecoration: 'none', cursor: 'pointer' }} onClick={() => handleListOrder(2)}>{selectedToOrder.index === 2 ? (selectedToOrder.ascending ? '\u2193' : '\u2191') : '-'}</a></h3>
+          <h3 style={{ width: 110 }}>Status<a style={{ textDecoration: 'none', cursor: 'pointer' }} onClick={() => handleListOrder(3)}>{selectedToOrder.index === 3 ? (selectedToOrder.ascending ? '\u2193' : '\u2191') : '-'}</a></h3>
           <h3 style={{ width: 110 }}>Tags</h3>
           <div style={{ width: 40 }} />
         </div>
