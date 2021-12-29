@@ -1,4 +1,4 @@
-FROM node:16
+FROM timbru31/java-node:latest
 
 WORKDIR /usr/src/app
 
@@ -6,9 +6,9 @@ COPY package*.json yarn.lock ./
 
 ADD ./schema.yaml /usr/src
 
-CMD ["npm", "install", "--global", "yarn"]
-
 RUN yarn --pure-lockfile
+
+RUN yarn openapi
 
 COPY . .
 

@@ -13,7 +13,6 @@ services:
       - app-net
   node-backend:
     restart: unless-stopped
-    image: express-api
     build:
       context: ./backend
       dockerfile: ./Dockerfile
@@ -27,9 +26,8 @@ services:
       - app-net
   react-app:
     restart: unless-stopped
-    image: react-app
     build:
-      context: ./backend
+      context: ./demo-app
       dockerfile: ./Dockerfile
     expose:
       - "3000"
