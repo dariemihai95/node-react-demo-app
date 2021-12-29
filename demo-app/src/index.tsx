@@ -5,10 +5,13 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 
+
+const localJwtToken = localStorage.getItem('jwt') || '';
+
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <App localJwtToken={localJwtToken}/>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')

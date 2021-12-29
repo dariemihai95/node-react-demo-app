@@ -7,11 +7,11 @@ import PrivateRoute from './containers/PrivateRoute';
 import RegisterScreen from './containers/RegisterScreen/RegisterScreen';
 import { getLocalStorageToken, setLocalStorageToken } from './utils/authManager';
 
-function App() {
+function App({ localJwtToken }: { localJwtToken: string }) {
 
   useEffect(() => {
     const jwt = getLocalStorageToken();
-    jwt && setJwtToken(jwt);
+    jwt && setJwtToken(localJwtToken);
   }, [])
 
   const onSetJwtToken = (jwt: string) => {
@@ -47,8 +47,8 @@ function App() {
         <Route path="/login" element={<LoginScreen setJwtToken={onSetJwtToken} />} />
         <Route path="/register" element={<RegisterScreen />} />
         <Route path="/" element={
-          <PrivateRoute jwtToken={jwtToken}>
-            <HomeScreen jwtToken={jwtToken} setJwtToken={onSetJwtToken} />
+          <PrivateRoute jwtToken={localJwtToken || jwtToken}>
+            <HomeScreen jwtToken={localJwtToken || jwtToken} setJwtToken={onSetJwtToken} />
           </PrivateRoute>
         }
         />
