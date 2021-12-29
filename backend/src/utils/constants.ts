@@ -1,8 +1,8 @@
 export const daoModelName = {
-  user: "user",
-  task: "task"
+  user: "users",
+  task: "tasks"
 }
 
 export const jwtExpiry = {
-  auth: '10m',
+  auth: '25m',
 }

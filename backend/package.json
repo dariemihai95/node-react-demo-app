@@ -6,10 +6,10 @@
   "scripts": {
     "start": "ts-node-dev ./index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "openapi": "openapi-generator-cli generate -i schema.yaml -g typescript-node -o ./src/openapi && rm -fr ./src/openapi/api && rm ./src/openapi/api.ts"
+    "openapi": "openapi-generator-cli generate -i ../schema.yaml -g typescript-node -o ./src/openapi && rm -fr ./src/openapi/api && rm ./src/openapi/api.ts"
   },
   "author": "Mihai-Cristian Darie",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.4.21",
     "@types/express": "^4.17.13",
@@ -27,9 +27,10 @@
     "@types/bcryptjs": "^2.4.2",
     "@types/jsonwebtoken": "^8.5.6",
     "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.2",
-    "express-openapi-validator": "3.10.0",
+    "express-openapi-validator": "4.13.4",
     "jsonwebtoken": "^8.5.1",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.12.1",
