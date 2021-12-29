@@ -1,7 +1,6 @@
 # node-react-demo-app
 ## ExpressJs Openapi Typescript React app
 
-
 ### prerequisites:
 
 - node
@@ -9,6 +8,8 @@
 - yarn (recommended) (yarn.lock already generated, can use npm as well)
 - docker & docker-compose
 # Install
+
+The application will run on localhost:3000
 
 ## easy installation - docker-compose way
 
