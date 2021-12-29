@@ -71,4 +71,3 @@ export const getTaskList = async (queryItems: { pageSize?: number, pageNumber?: 
 export const getTask = async (jwt: string): Promise<ITask | string> => {
   return await makeRequest(RequestMethod.GET, URIBase.api, path.getTask, {}, true, '[getTask]', jwt);
 };
-

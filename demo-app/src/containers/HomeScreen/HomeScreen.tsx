@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ITask } from '../../openapi/api';
@@ -60,6 +61,13 @@ const HomeScreen = ({ jwtToken, setJwtToken }: { jwtToken: string, setJwtToken: 
     }
   }
 
+  const onChangeTags = (event: any) => {
+    setTaskData({
+      ...taskData, tags: event.target.
+        value.replace(/[&\/\\# +()$~%.'":*?<>{}^@!-]/g, ',').replace(',,', ',')
+    });
+  }
+
   const logout = async (event: any) => {
     setLoadedPages(1)
     setSelectedToOrder({ index: undefined, ascending: true });
@@ -107,76 +115,90 @@ const HomeScreen = ({ jwtToken, setJwtToken }: { jwtToken: string, setJwtToken: 
   }, [])
   return (
     <div>
-      <label>Hello to homescreen</label>
-      <button onClick={logout}>
-        Logout
-      </button>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ width: 20 }} />
+        <label style={{ fontSize: 25, fontWeight: 'bold', margin: 10 }}>Home</label>
+        <a style={{ margin: 10, height: 20, width: 20, textDecoration: 'none', cursor: 'pointer' }} onClick={logout}>
+          <img style={{ height: 15 }} alt='logout-logo' src={require('../../assets/images/logout-res.png')} />
+        </a>
+      </div>
       <div
       >
         <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-          <h3 style={{ width: 110 }}>Name<a style={{ textDecoration: 'none', cursor: 'pointer' }} onClick={() => handleListOrder(0)}>{selectedToOrder.index === 0 ? (selectedToOrder.ascending ? '\u2193' : '\u2191') : '-'}</a></h3>
-          <h3 style={{ width: 110 }}>Description<a style={{ textDecoration: 'none', cursor: 'pointer' }} onClick={() => handleListOrder(1)}>{selectedToOrder.index === 1 ? (selectedToOrder.ascending ? '\u2193' : '\u2191') : '-'}</a></h3>
-          <h3 style={{ width: 110 }}>Due Date<a style={{ textDecoration: 'none', cursor: 'pointer' }} onClick={() => handleListOrder(2)}>{selectedToOrder.index === 2 ? (selectedToOrder.ascending ? '\u2193' : '\u2191') : '-'}</a></h3>
-          <h3 style={{ width: 110 }}>Status<a style={{ textDecoration: 'none', cursor: 'pointer' }} onClick={() => handleListOrder(3)}>{selectedToOrder.index === 3 ? (selectedToOrder.ascending ? '\u2193' : '\u2191') : '-'}</a></h3>
-          <h3 style={{ width: 110 }}>Tags</h3>
-          <div style={{ width: 40 }} />
+          <h3 style={{ width: 110, fontSize: '14px', fontWeight: '500', textAlign: 'start' }}>Name<a style={{ textDecoration: 'none', cursor: 'pointer' }} onClick={() => handleListOrder(0)}>{selectedToOrder.index === 0 ? (selectedToOrder.ascending ? '\u2193' : '\u2191') : ' -'}</a></h3>
+          <h3 style={{ width: 110, fontSize: '14px', fontWeight: '500', textAlign: 'start' }}>Description<a style={{ textDecoration: 'none', cursor: 'pointer' }} onClick={() => handleListOrder(1)}>{selectedToOrder.index === 1 ? (selectedToOrder.ascending ? '\u2193' : '\u2191') : ' -'}</a></h3>
+          <h3 style={{ width: 110, fontSize: '14px', fontWeight: '500', textAlign: 'start' }}>Due Date<a style={{ textDecoration: 'none', cursor: 'pointer' }} onClick={() => handleListOrder(2)}>{selectedToOrder.index === 2 ? (selectedToOrder.ascending ? '\u2193' : '\u2191') : ' -'}</a></h3>
+          <h3 style={{ width: 110, fontSize: '14px', fontWeight: '500', textAlign: 'start' }}>Status<a style={{ textDecoration: 'none', cursor: 'pointer' }} onClick={() => handleListOrder(3)}>{selectedToOrder.index === 3 ? (selectedToOrder.ascending ? '\u2193' : '\u2191') : ' -'}</a></h3>
+          <h3 style={{ width: 110, fontSize: '14px', fontWeight: '500', textAlign: 'start' }}>Tags</h3>
+          <a style={{ margin: 10, height: 20, width: 20, textDecoration: 'none', cursor: 'pointer' }} onClick={refreshList}>
+            <img style={{ height: 18 }} alt='refresh-logo' src={require('../../assets/images/refresh-res.png')} />
+          </a>
         </div>
         <form
           style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}
           onSubmit={handleSubmit}
         >
           <input
-            style={{ width: 110 }}
+            style={{ width: 110, borderBottomWidth: 1, paddingBottom: 4, height: 20, borderWidth: 0, outline: 'none' }}
+            required
             type="text"
             name="name"
+            maxLength={17}
+            placeholder='Task name'
             onChange={handleChange}
             value={taskData.name}
           />
           <input
-            style={{ width: 110 }}
+            style={{ width: 110, borderBottomWidth: 1, paddingBottom: 4, height: 20, borderWidth: 0, outline: 'none', position: 'relative', left: -3 }}
+            required
+            maxLength={17}
             type="text"
             name="description"
+            placeholder='Task description'
             onChange={handleChange}
             value={taskData.description}
           />
           <input
-            style={{ width: 110 }}
+            style={{ width: 110, borderBottomWidth: 1, paddingBottom: 4, height: 20, borderWidth: 0, outline: 'none', color: '#767676', backgroundColor: 'white', position: 'relative', left: -6 }}
+            required
             type="date"
             name="dueDate"
+            placeholder='yyy.mm.dd'
             onChange={handleChange}
             value={`${taskData.dueDate}`}
           />
-          <select style={{ width: 110 }} name="status" id="status" onChange={handleChange} value={taskData.status}>
+          <select required style={{ width: 110, borderBottomWidth: 1, paddingBottom: 4, height: 20, borderWidth: 0, outline: 'none', color: '#767676', backgroundColor: 'white', position: 'relative', left: -8 }} name="status" id="status" onChange={handleChange} value={taskData.status}>
             <option value="ToDo">To Do</option>
             <option value="InProgress">In Progress</option>
             <option value="Done">Done</option>
             <option value="Failed">Failed</option>
           </select>
           <input
-            style={{ width: 110 }}
+            style={{ width: 110, borderBottomWidth: 1, paddingBottom: 4, height: 20, borderWidth: 0, outline: 'none' }}
             type="text"
             name="tags"
-            onChange={handleChange}
+            maxLength={17}
+            placeholder='Optional tags'
+            onChange={onChangeTags}
             value={taskData.tags}
           />
-          <input style={{ width: 40 }} type="submit" value="Add" />
+          <input style={{ width: 40, color: 'white', height: 20, borderRadius: 20, borderWidth: 0, backgroundImage: 'linear-gradient(to right, #E27D60 , #C38D9E)' }} type="submit" value="Add" />
         </form>
         {taskList.map((item: ITask, index: number) => (
-          <div style={{ display: 'flex', justifyContent: 'space-around' }} key={index}>
-            <label style={{ width: 110 }}>{item.name}</label>
-            <label style={{ width: 110 }}>{item.description}</label>
-            <label style={{ width: 110 }}>{item.dueDate}</label>
-            <label style={{ width: 110 }}>{item.status}</label>
-            <label style={{ width: 110 }}>{item.tags}</label>
+          <div style={{ display: 'flex', justifyContent: 'space-around', borderTopWidth: 1, borderTopColor: '#767676', marginTop: 10 }} key={index}>
+            <label style={{ width: 110, display: 'flex' }}>{item.name}</label>
+            <label style={{ width: 110, display: 'flex' }}>{item.description}</label>
+            <label style={{ width: 110, display: 'flex' }}>{item.dueDate}</label>
+            <label style={{ width: 110, display: 'flex' }}>{item.status}</label>
+            <label style={{ width: 110, display: 'flex' }}>{item.tags}</label>
             <div style={{ width: 40 }} />
           </div>
         ))}
       </div>
-      <button onClick={loadMoreItems}>
+      <button style={{
+        marginTop: 30, color: 'white', width: 200, height: 30, borderRadius: 20, borderWidth: 0, backgroundImage: 'linear-gradient(to right, #41B3A3, #E8A87C)'
+      }} onClick={loadMoreItems}>
         Load more items...
-      </button>
-      <button onClick={refreshList}>
-        Refresh...
       </button>
     </div>
   );

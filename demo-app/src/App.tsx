@@ -6,7 +6,6 @@ import LoginScreen from './containers/LoginScreen/LoginScreen';
 import PrivateRoute from './containers/PrivateRoute';
 import RegisterScreen from './containers/RegisterScreen/RegisterScreen';
 import { getLocalStorageToken, setLocalStorageToken } from './utils/authManager';
-import themes from './utils/themes';
 
 function App() {
 
@@ -43,7 +42,7 @@ function App() {
   }, [screenSize])
 
   return (
-    <div className="App" style={{ backgroundColor: themes.colors.background, height: screenSize.dynamicHeight, width: screenSize.dynamicWidth }}>
+    <div className="App" style={{ width: screenSize.dynamicWidth }}>
       <Routes>
         <Route path="/login" element={<LoginScreen setJwtToken={onSetJwtToken} />} />
         <Route path="/register" element={<RegisterScreen />} />
