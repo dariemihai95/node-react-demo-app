@@ -27,6 +27,18 @@ class TaskRepository {
         return taskDao;
     }
 
+    public async updateOneById(taskDao: TaskDao, taskId: string): Promise<TaskDao> {
+        const updatedTask: [number, TaskDao[]] = await TaskDao.update({
+            name: taskDao.name,
+            description: taskDao.description,
+            dueDate: taskDao.dueDate,
+            status: taskDao.status,
+            tags: taskDao.tags,
+        }, { where: { taskId: taskId }, returning: true });
+        const updatedTaskObject: TaskDao = updatedTask && updatedTask[1][0];
+        return updatedTaskObject;
+    }
+
     public async deleteOneById(taskId: string): Promise<boolean> {
         const deletedTask: number = await TaskDao.destroy({ where: { taskId: taskId } });
         const isTaskDeleted: boolean = Boolean(deletedTask);

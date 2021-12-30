@@ -34,6 +34,18 @@ module.exports = {
     }
   },
 
+  updateTask: async (request: any, response: express.Response, next: express.NextFunction) => {
+    try {
+      // const taskId: string = request.params.taskId;
+      const task: Task = request.body;
+      // validateRegister(task);
+      const modifiedTask: Task = await TaskService.modifyTask(task);
+      modifiedTask && response.status(Responses.created.status).send(modifiedTask);
+    } catch (error) {
+      next(error);
+    }
+  },
+
   getTaskById: async (request: any, response: express.Response, next: express.NextFunction) => {
     try {
       const taskId: string = request.params.taskId;

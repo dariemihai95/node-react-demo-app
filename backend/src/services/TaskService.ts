@@ -49,6 +49,22 @@ class TaskService {
     throw new HandledError(Responses.forbidden);
   }
 
+  public async modifyTask(task: Task): Promise<Task> {
+    if (task.taskId) {
+      let taskDao: TaskDao | null = await TaskRepository.findOneById(task.taskId);
+      if (taskDao && task.name && task.description && task.dueDate && task.status) {
+        const userId = taskDao.userId;
+        taskDao = TaskConverter.convertToDao(task, userId);
+        const modifiedTask: TaskDao = await TaskRepository.updateOneById(taskDao, task.taskId);
+        return TaskConverter.convertToDto(modifiedTask);
+      } else {
+        throw new HandledError(Responses.badRequest);
+      }
+    } else {
+      throw new HandledError(Responses.badRequest);
+    }
+  }
+
   public async getTaskById(taskId: string): Promise<Task> {
     const taskDao: TaskDao | null = await TaskRepository.findOneById(taskId);
     if (taskDao) {

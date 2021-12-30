@@ -57,7 +57,7 @@ const RegisterScreen = () => {
         <div>
           <p style={{ color: 'red', marginTop: 10, fontSize: 12 }}>{registerError}</p>
           <br />
-          <input type="submit" value="REGISTER" style={{ color: 'white', marginTop: 30, width: 200, height: 30, borderRadius: 20, borderWidth: 0, backgroundImage: 'linear-gradient(to right, #41B3A3 , #E8A87C)' }} />
+          <input type="submit" value="REGISTER" style={{ color: 'white', marginTop: 30, width: 200, height: 30, borderRadius: 20, borderWidth: 0, backgroundImage: 'linear-gradient(to right, #41B3A3 , #E8A87C)', cursor: 'pointer' }} />
         </div>
       </form>
       <p style={{ color: '#444', display: 'flex', flexDirection: 'column', marginTop: 40 }}>Already have an account ? {<Link style={{ textDecoration: 'none', cursor: 'pointer', color: 'black', margin: 10 }} to="/login">LOGIN</Link>}</p>

@@ -9,6 +9,7 @@ export const path = {
   register: '/authentication/register',
   login: '/authentication/login',
   createTask: '/api/task',
+  updateTask: '/api/task/update',
   getTaskList: '/api/tasks',
   getTask: '/api/task',
 };

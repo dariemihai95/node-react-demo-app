@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { IJwtAuthenticationResponse } from '../../openapi';
 import { postLogin } from '../../services/axiosService';
@@ -8,6 +8,10 @@ const LoginScreen = ({ setJwtToken }: { setJwtToken: (payload: string) => void }
 
   const [accountData, setAccountData] = useState({ username: '', password: '' });
   const [loginError, setLoginError] = useState('');
+
+  useEffect(() => {
+    window.location.reload();
+  }, [])
 
   const handleChange = (event: any) => {
     setAccountData({ ...accountData, [event.target.name]: event.target.value });
@@ -59,7 +63,7 @@ const LoginScreen = ({ setJwtToken }: { setJwtToken: (payload: string) => void }
           <p style={{ color: 'red', marginTop: 10, fontSize: 12 }}>{loginError}</p>
           <br />
           <input type="submit" value="LOGIN" style={{
-            marginTop: 30, color: 'white', width: 200, height: 30, borderRadius: 20, borderWidth: 0, backgroundImage: 'linear-gradient(to right, #41B3A3 , #E8A87C)'
+            marginTop: 30, color: 'white', width: 200, height: 30, borderRadius: 20, borderWidth: 0, backgroundImage: 'linear-gradient(to right, #41B3A3 , #E8A87C)', cursor: 'pointer'
           }} />
         </div>
       </form>

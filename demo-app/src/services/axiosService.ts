@@ -64,6 +64,10 @@ export const postCreateTask = async (payload: ITask, jwt: string): Promise<ITask
   return await makeRequest(RequestMethod.POST, URIBase.api, path.createTask, payload, true, '[postCreateTask]', jwt);
 };
 
+export const putUpdateTask = async (payload: ITask, jwt: string): Promise<ITask | string> => {
+  return await makeRequest(RequestMethod.PUT, URIBase.api, path.updateTask, payload, true, '[putCreateTask]', jwt);
+};
+
 export const getTaskList = async (queryItems: { pageSize?: number, pageNumber?: number, order?: string, sortBy?: string }, jwt: string): Promise<ITask[] | string> => {
   return await makeRequest(RequestMethod.GET, URIBase.api, path.getTaskList, queryItems, true, '[getTaskList]', jwt);
 };

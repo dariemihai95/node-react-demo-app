@@ -124,6 +124,37 @@ paths:
           description: You don't have privileges to access this resource
         '404':
           description: The requested resource was not found
+  /api/task-update:
+    put:
+      security:
+        - BearerAuth: [] 
+      tags:
+        - task
+      summary: update task
+      description: ''
+      operationId: updateTask
+      x-eov-operation-handler: controllers/TaskController
+      parameters: []
+      requestBody:
+        description: Update Task
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+      responses:
+        '201':
+          description: The request has been fulfilled and has resulted in one or more new resources being updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: Request has wrong format
+        '401':
+          description: You don't have privileges to access this resource
+        '404':
+          description: The requested resource was not found
   /api/tasks:
     get:
       security:
@@ -187,6 +218,8 @@ components:
     Task:
       type: object
       properties:
+        taskId:
+          type: string
         name:
           type: string
         description:

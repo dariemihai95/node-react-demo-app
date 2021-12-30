@@ -5,6 +5,7 @@ class TaskConverter {
 
     public convertToDto(taskDao: TaskDao): Task {
         const taskDto: Task = new Task();
+        taskDto.taskId = taskDao.taskId;
         taskDto.name = taskDao.name;
         taskDto.description = taskDao.description;
         taskDto.dueDate = taskDao.dueDate;
